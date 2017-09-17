@@ -1,0 +1,25 @@
+## macOS
+._*
+.AppleDouble
+.DS_Store
+.localized
+.LSOverride
+.Spotlight-V100
+.Trashes
+Icon
+
+# Linux
+*~
+
+## Windows
+Desktop.ini
+ehthumbs.db
+Thumbs.db
+
+## Node
+npm-debug.log
+node_modules/
+
+## Ruby
+.gems/
+.rbenv-gemsets

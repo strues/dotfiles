@@ -1,0 +1,142 @@
+
+[alias]
+
+  a       = commit --amend
+  b       = branch
+  c       = commit
+  ca      = !git add -A && git commit                                       # Commit all changes
+  co      = checkout
+  commend = commit --amend --no-edit
+  cp      = cherry-pick
+  d       = diff
+  dc      = diff --cached
+  dm      = !git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d # Remove branches that have already been merged with master
+  fp      = push --force
+  g       = log --graph --pretty=custom                                     # Show custom graph
+  l       = log --pretty=custom                                             # Show custom log
+  lc      = shortlog --summary --numbered                                   # List contributors
+  please  = push --force-with-lease
+  rc      = rebase --continue
+  rlc     = !git reset --hard HEAD~1                                        # Remove last commit
+  st      = status --short --branch
+  stsh    = stash --keep-index
+  staash  = stash --include-untracked
+  staaash = stash --all
+  ulc     = reset --soft HEAD~1                                             # Undo last commit
+  up      = pull --rebase --autostash                                       # Requires Git 2.9+
+  promote = !$DOTFILES/bin/git-promote
+  wtf     = !$DOTFILES/bin/git-wtf
+  rank-contributors = !$DOTFILES/bin/git-rank-contributors
+  count   = !git shortlog -sn
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Shows the most recent changes for each branch
+
+  changes = "!f() { \
+    git for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/remotes/origin; \
+  }; f"
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Credit an author on the latest commit
+
+  credit = "!f() { \
+    if [ -n \"$1\" ] && [ -n \"$2\" ]; then \
+      git commit --amend --author \"$1 <$2>\" -C HEAD; \
+    fi \
+  }; f"
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Switch to a branch, creating it if necessary
+
+  go = "!f() { \
+    git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; \
+  }; f"
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Merge GitHub pull request on top of the `master` branch
+
+  mpr = "!f() { \
+    if [ $(printf \"%s\" \"$1\" | grep '^[0-9]\\+$' > /dev/null; printf $?) -eq 0 ]; then \
+      git fetch origin refs/pull/$1/head:pr/$1 && \
+      git rebase master pr/$1 && \
+      git checkout master && \
+      git merge pr/$1 && \
+      git branch -D pr/$1 && \
+      git commit --amend -m \"$(git log -1 --pretty=%B)\n\nClose #$1\"; \
+    fi \
+  }; f"
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Interactive rebase with the given number of latest commits
+
+  reb = "!f() { \
+    git rebase -i HEAD~$1; \
+  }; f"
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Undo (http://megakemp.com/2016/08/25/git-undo/)
+  undo = "!f() { \
+    git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; \
+  }; f"
+
+[apply]
+
+  # Detect whitespace errors when applying a patch
+  whitespace = fix
+  
+[core]
+
+  attributesfile = ~/.gitattributes
+	autocrlf = input
+  editor = code
+  excludesfile = ~/.gitignore
+
+  # Prevent showing files whose names contain non-ASCII symbols as unversioned.
+  # http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
+  precomposeunicode = false
+
+  # Make `git rebase` safer on macOS
+  # http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/
+  trustctime = false
+
+  # Treat spaces before tabs and all kinds of trailing whitespace as an error
+  # [default] trailing-space: looks for spaces at the end of a line
+  # [default] space-before-tab: looks for spaces before tabs at the beginning of a line
+  whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  ui = true
+
+[diff]
+  # Enable an experimental heuristic that shifts the hunk boundary in an
+  # attempt to make the resulting patch easier to read.
+  indentHeuristic = true
+
+  # Detect copies as well as renames
+  renames = copies
+  
+# Local/private config goes in the include
+[include]
+  path = ~/.gitconfig.local
+
+[mergetool]
+  keepBackup = false
+
+[pager]
+  diff = diff-so-fancy | less --tabs=1,5 -RFX
+  show = diff-so-fancy | less --tabs=1,5 -RFX
+
+[push]
+  # Make `git push` automatically push relevant
+  # annotated tags when pushing branches out
+  followTags = true
+  # Make `git push` push only the current branch
+  default = simple

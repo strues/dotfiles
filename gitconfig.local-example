@@ -1,0 +1,12 @@
+[user]
+  email = emailaddress@domain.com
+  name = Your Name
+  signingkey = Delete if you arent using GPG
+  
+[gpg]
+  program = 
+[commit]
+  gpgsign = 
+
+[credential]
+  helper = GIT_CREDENTIAL_HELPER
