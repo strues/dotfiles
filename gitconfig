@@ -140,3 +140,17 @@
   followTags = true
   # Make `git push` push only the current branch
   default = simple
+
+[user]
+  useconfigonly = true
+    email = steven@trues.io
+    name = Steven Truesdell
+	signingkey = FEA5B7F7C3548C2FF22941783AC15329FDC34CC4
+[gpg]
+    program = /usr/local/MacGPG2/bin/gpg2
+[commit]
+    gpgsign = true
+
+[credential]
+        helper = GIT_CREDENTIAL_HELPER
+

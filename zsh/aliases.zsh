@@ -14,10 +14,21 @@ alias seedbox="ssh root@148.251.182.19 -p 2118"
 # -------------------------------------------------------------------
 # Git
 # -------------------------------------------------------------------
+
+# Use `hub` as our git wrapper:
+#   http://defunkt.github.com/hub/
+# hub_path=$(which hub)
+# if (( $+commands[hub] ))
+# then
+#   alias git=$hub_path
+# fi
+
 alias gl='git pull --prune'
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 alias gp='git push origin HEAD'
-
+alias g="git"
+alias gcl="git clone"
+alias ga="git add"
 # Remove `+` and `-` from start of diff lines; just rely upon color.
 alias gd='git diff --color | sed "s/^\([^-+ ]*\)[-+ ]/\\1/" | less -r'
 
@@ -59,7 +70,6 @@ alias tmux='TERM=screen-256color-bce tmux'
 alias acat='< $DOTFILES/zsh/aliases.zsh'
 alias fcat='< $DOTFILES/zsh/functions.zsh'
 
-
 # Just for fun
 alias please='sudo !!'
 alias fail='tail -f'
@@ -68,17 +78,7 @@ alias fail='tail -f'
 alias acat='< ~/.dotfiles/zsh/aliases.zsh'
 
 alias reload='source ~/.zshrc'
-alias ltd='ls *(m0)' # files & directories modified in last day
-alias lt='ls *(.m0)' # files (no directories) modified in last day
-alias lnew='ls *(.om[1,3])' # list three newest
 
-# Use `hub` as our git wrapper:
-#   http://defunkt.github.com/hub/
-hub_path=$(which hub)
-if (( $+commands[hub] ))
-then
-  alias git=$hub_path
-fi
 
 # -------------------------------------------------------------------
 # Node Stuff
@@ -126,27 +126,6 @@ alias httpdump="sudo tcpdump -i en0 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET
 # Enhanced WHOIS lookups
 alias whois="whois -h whois-servers.net"
 
-
-# -------------------------------------------------------------------
-# Mac Stuff
-# -------------------------------------------------------------------
-
-alias ql='qlmanage -p 2>/dev/null' # OS X Quick Look
-alias oo='open .' # open current directory in OS X Finder
-# alias to show all Mac App store apps
-alias apps='mdfind "kMDItemAppStoreHasReceipt=1"'
-# reset Address Book permissions in Mountain Lion (and later presumably)
-alias resetaddressbook='tccutil reset AddressBook'
-# refresh brew by upgrading all outdated casks
-alias refreshbrew='brew outdated | while read cask; do brew upgrade $cask; done'
-# rebuild Launch Services to remove duplicate entries on Open With menu
-alias rebuildopenwith='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user'
-alias defhist='history 1 | grep "defaults"'
-# Update installed Ruby gems, Homebrew, npm, and their installed packages
-alias brew_update="brew -v update; brew upgrade --force-bottle --cleanup; brew cleanup; brew cask cleanup; brew prune; brew doctor; npm-check -g -u"
-alias update_brew_npm_gem='brew_update; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update --no-document'
-
-
 # -------------------------------------------------------------------
 # directory information
 # -------------------------------------------------------------------
@@ -159,12 +138,6 @@ alias ll='ls -GFhl' # Same as above, but in long listing format
 
 alias lsd="ls -ld *" # show directories
 alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
-alias 'dirdus=du -sckx * | sort -nr' #directories sorted by size
-alias 'dus=du -kx | sort -nr | less' #files sorted by size
-
-alias 'wordy=wc -w * | sort | tail -n10' # sort files in current directory by the number of words they contain
-alias 'filecount=find . -type f | wc -l' # number of files (not directories)
-
 # these require zsh
 alias ltd='ls *(m0)' # files & directories modified in last day
 alias lt='ls *(.m0)' # files (no directories) modified in last day

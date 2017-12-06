@@ -2,7 +2,7 @@
 
 # Make some commands not show up in history
 HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help"
-HISTSIZE=100000
+HISTSIZE=10000
 SAVEHIST=$HISTSIZE
 HISTFILE=~/.zsh_history
 HISTCONTROL=ignoredups

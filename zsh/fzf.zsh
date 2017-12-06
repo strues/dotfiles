@@ -70,16 +70,3 @@ _fzf_complete_docker() {
     )
   fi
 }
-
-# Read kube config to load pods
-_fzf_complete_kubectl() {
-  ARGS="$@"
-  # match cluster name from args
-  # kubectl config view -o json | jq '.clusters as $clusters | .contexts[] | select(.name=="cn") | .context.cluster as $cluster_name | $clusters[] | select(.name==$cluster_name) | .cluster.server | rtrimstr(":8443")'
-  if [[ $ARGS =~ '^kubectl --context[= ]([^ ]+) ' ]]; then
-    local context=$match[1]
-    _fzf_complete "--multi --reverse" "$@" < <(
-        curl -s $(kubectl config view -o json | jq -r --arg context_name "$context" '.clusters as $clusters | .contexts[] | select(.name==$context_name) as $context | $clusters[] | select(.name==$context.context.cluster) | .cluster.server | rtrimstr(":8443") | "\(.)/api/v1/namespaces/\($context.context.namespace)/pods?pretty=false"') | jq -r '.items[] | .metadata.name'
-    )
-  fi
-}

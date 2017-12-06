@@ -1,27 +1,46 @@
 # Homebrew Cask directory
 export HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications"
 # your project folder that we can `c [tab]` to
-export PROJECTS=$HOME/Code
+export PROJECTS="$HOME/Code"
 
+
+export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 
 export PATH="$PATH:/usr/local/opt/openssl/bin:/usr/local/etc/openssl/misc:$PATH"
-export PATH=$DOTFILES/bin:$PATH;
 
-export MANPATH="/usr/local/man:$MANPATH"
-export GOPATH=$PROJECTS/go
+export PATH="$DOTFILES/bin:$PATH"
+
+export MANPATH="/usr/local/man:/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+export GOPATH="$PROJECTS/go"
 export PATH="$GOPATH/bin:$PATH"
-export PATH=$PATH:/usr/local/sbin:$HOME/bin:/usr/local/go/bin
+export PATH="$PATH:/usr/local/sbin:$HOME/bin:/usr/local/go/bin"
+export XDG_CACHE_HOME="$HOME/.cache"
 
-# Ensure path arrays do not contain duplicates.
-typeset -gU cdpath fpath mailpath path
+export ANDROID_HOME="/Users/steven/Library/Android/sdk"
+export GRADLE_HOME="/usr/local/Cellar/gradle/4.3.1"
+export GRADLE_USER_HOME="$GRADLE_HOME"
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+
+export ZCACHEDIR="$XDG_CACHE_HOME/zsh"
+if [[ ! -d "$ZCACHEDIR" ]]; then
+  mkdir -p "$ZCACHEDIR"
+fi
+# Enable persistent REPL history for `node`.
+export NODE_REPL_HISTORY="$HOME/.node_history"
+# Allow 32³ entries; the default is 1000.
+export NODE_REPL_HISTORY_SIZE='32768';
+# Use sloppy mode by default, matching web browsers.
+export NODE_REPL_MODE='sloppy';
 
 export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/usr/local/share/zsh-syntax-highlighting/highlighters
 
 # Setup terminal, and turn on colors
 #export TERM=xterm-256color
-export TERM=screen-256color
+export TERM="screen-256color"
 export CLICOLOR=1
-export LSCOLORS=Gxfxcxdxbxegedabagacad
+export LSCOLORS="Gxfxcxdxbxegedabagacad"
 
 # Enable color in grep
 export GREP_OPTIONS='--color=auto'
@@ -33,9 +52,8 @@ export ARCHFLAGS="-arch x86_64"
 # Don’t clear the screen after quitting a manual page
 export MANPAGER="less -X"
 
-# Make less the default pager, add some options and enable syntax highlight using source-highlight
-LESSPIPE=`which src-hilite-lesspipe.sh`
-[ -n "$LESSPIPE" ] && export LESSOPEN="| ${LESSPIPE} %s"
+export LESSOPEN="| $(brew --prefix)/bin/src-hilite-lesspipe.sh %s"
+
 less_options=(
   # If the entire text fits on one screen, just show it and quit. (Be more
   # like "cat" and less like "more".)
@@ -59,6 +77,7 @@ less_options=(
   # Do not complain when we are on a dumb terminal.
   --dumb
 );
+
 export LESS="${less_options[*]}"
 export PAGER='less'
 #
@@ -92,13 +111,21 @@ else
 fi
 
 # rbenv
+export RBENV_ROOT=/usr/local/var/rbenv
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
-export NVM_DIR="$HOME/.nvm"
-  . "/usr/local/opt/nvm/nvm.sh"
+ # Added by n-install (see http://git.io/n-install-repo).
+ # Used instead of nvm
+export N_PREFIX="$HOME/.n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"
+
 
 if (( $+commands[yarn] ))
 then
   export PATH="$PATH:`yarn global bin`"
 fi
+# http://stackoverflow.com/a/23832208/1294213
+export PHANTOMJS_CDNURL='http://cnpmjs.org/downloads'
+
+export -U PATH
+export -U MANPATH
